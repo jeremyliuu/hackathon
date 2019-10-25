@@ -101,8 +101,9 @@ class BaseEndpoint(object):
             while url:
                 data = response.json()
                 url = data['next']  # Same as the resource URL, but with the page query parameter present
-                for result in data['results']:
-                    yield result
+                #for result in data['results']:
+                    #yield result
+                yield data['results']
         else:
             exe = ERROR_CODES.get(response.status_code, APIException)
             self.logger.debug("list exception {}".format(exe))

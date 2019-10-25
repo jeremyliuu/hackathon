@@ -1,11 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Welcome to drchrono</title>
-</head>
-<body>
-<h1>Welcome {{ doctor.first_name }} {{ doctor.last_name }}</h1>
-{{ doctor }}
-</body>
-</html>
+{% extends "base.html" %}
+{% block body %}
+<p class="navbar-text">Welcome Doctor {{ doctor.first_name }} {{ doctor.last_name }}</p>
+<button onclick="window.open('/check_in','_blank')" class="btn btn-default navbar-btn">Check-in Page</button>
+<p class="navbar-text" style="float:right;">Average Waiting Time: {{ avg_time_waited }} min</p>
+{% endblock body %}
+{% block content %}
+<meta http-equiv="refresh" content="60">
+<h3>Appointments Today<small> {{ today_date }}</small></h3> 
+    <div>
+        <!-- Refresh button -->
+        <button type="button" class="btn btn-default" style="float:right;" onClick="window.location.reload();">
+            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+            Refresh
+        </button>
+        <form action="/welcome/" method="post">
+            {% csrf_token %} 
+            <!-- show appointment list in different status -->
+            <button type="submit" name="option" value="All" class="btn btn-default">All</button>
+            <button type="submit" name="option" value="Arrived" class="btn btn-info">Arrived</button>
+            <button type="submit" name="option" value="In Session" class="btn btn-success">In Session</button>
+            <button type="submit" name="option" value="Complete" class="btn btn-warning">Complete</button>
+        </form> 
+    </div>
+    <table class="table table-striped">
+        <!-- appointment list -->
+        <thead>
+        <tr>
+            <th>Patient Name</th>
+            <th>Scheduled Time</th>
+            <th>Room</th>
+            <th>Status</th>
+            <th>Time Waited</th>
+            <th>Start Appointment</th>
+            <th>Finish Appointment</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for a in appointment %}
+        <tr>
+            <td>{{ a.patient_name }}</td>
+            <td>{{ a.brief_scheduled_time }}</td>
+            <td>Room {{ a.exam_room }}</td>
+            <td>{{ a.status }}</td>
+            <td>{{ a.waited_time_display }}</td>
+            <td>
+                <form action="/update/" method="post">
+                    {% csrf_token %} 
+                    <!-- start button: doctor can start this appointment -->
+                    <input type="hidden" name="id" value="{{ a.id }}"> </input>
+                    <input type="hidden" name="status" value="In Session"> </input>
+                    {% if a.status == 'Arrived' %}
+                        <button type="submit" class="btn btn-success">Start</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-default" disabled="disabled">Start</button>
+                    {% endif %}
+                </form>
+            </td>
+            <td>
+                <form action="/update/" method="post">
+                    {% csrf_token %} 
+                    <!-- finish button: doctor can end this appointment -->
+                    <input type="hidden" name="id" value="{{ a.id }}"> </input>
+                    <input type="hidden" name="status" value="Complete"> </input>
+                    {% if a.status == 'In Session' %}
+                        <button type="submit" class="btn btn-warning">Finish</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-default" disabled="disabled">Finish</button>
+                    {% endif %}
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}
+{% block scripts %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+{% endblock scripts %}

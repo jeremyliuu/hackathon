@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+	{% if message %}
+	<div class="alert alert-warning" role="alert">
+		{{ message }}
+	</div>
+    {% endif %}
+	<div class="row">
+		<div class="col">	
+		<form action="/select/" method="post">
+			{% csrf_token %}
+			<ul class="list-group"></ul>
+			{% for appointment in appointments %}
+				<li class="list-group-item">
+					{% if forloop.counter == 1 %}
+						<input type = "radio" name="appointment" value="{{ appointment.id }}" checked></input>
+					{% else %}
+						<input type = "radio" name="appointment" value="{{ appointment.id }}" ></input>
+					{% endif %}
+					<input type="hidden" name="patient" value="{{ appointment.patient }}"> </input>
+					{{ appointment.patient_name }}  |  {{ appointment.brief_scheduled_time }}  |  room {{ appointment.exam_room }}
+				</li>
+			{% endfor %}
+			</ul>
+			<br>
+			<button type="submit" class="btn btn-success">Choose Appointment</button>
+		</form>
+		</div>
+	</div>
+</div>
+{% endblock content %}

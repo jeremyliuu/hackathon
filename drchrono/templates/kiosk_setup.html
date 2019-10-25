@@ -1,8 +1,32 @@
-<!DOCTYPE html>
-<html>
-  <body>
-    <a href="{% url 'social:begin' 'drchrono' %}">
-      Set up your Check-in kiosk by logging into drchrono!
-    </a>
-  </body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-11">
+    <div class="jumbotron">
+        <h1 style="font-size: 40px;">Drchrono Check-in Kiosk System<small> ver.0.1.0-alpha</small></h1>
+        <ul style = "font-size: 17px;">
+            <li><b>Tutorial:</b></li>
+            <ul>
+                <li>Doctor can see appointments today after login.</li>
+                <li>Patients can provide their names(maybe SSN) in the check-in page.</li>
+                <li>After that, they need to select one appointment and update their information.</li>
+                <li>A page will be showed if they check-in successfully.</li>
+            </ul>
+            <li><b>Additional Features: </b></li>
+            <ul>
+                <li>Check-in Page button in Navbar. Open check-in page in new tab.</li>
+                <li>Appointment filter. Can show appointment list in three different status.</li>
+                <li>Auto-refreshing doctor page in 60 seconds. Refresh button allows you to refresh by hand.</li>
+                <li>Error message in check-in page if patients enter wrong info or have no appointments/already checked in.</li>
+                <li>Skip button in demographic info update page.</li>
+                <li>Redirect to check-in page after 'successfully check-in' message showed.</li>
+            </ul>
+          </ul>
+          <br>
+          <a class="btn btn-lg btn-success" href="{% url 'social:begin' 'drchrono' %}" role="button">Login with Drchrono</a>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock content %}

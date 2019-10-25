@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form method='POST' class="form-horizontal"> 
+                {% csrf_token %}
+                {{ form }}
+                <br>
+                <button type='submit' name="action" value="update" class="btn btn-success">Update</button>
+                <button type='submit' name="action" value="skip" class="btn btn-primary">Skip</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
